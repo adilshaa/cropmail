@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import PrivateRoute from "./components/PrivateRoute";
 import LoginPage from "./pages/Login";
 import Home from "./pages/Home";
 import LandingPage from "./pages/Landing";
@@ -18,8 +19,8 @@ import Payment from "./pages/Payment";
 import { Elements } from "@stripe/react-stripe-js";
 import { post } from "./services/apiService";
 import Pricing from "./pages/Plans";
-import { AuthProvider } from "./context/AuthContext";
-import { Settings } from "./components/Settings";
+import Settings from "./components/Settings";
+import Schedule from "./components/Schedule";
 
 const stripePromise = loadStripe(
 	"pk_test_51QZz8CJiFOOk4zjno8t5Z0TR17DSktasAndTdOfamjjOdAMjGH846nwwBXWZt4y9mgylRfTedw4xQg2Is1gYzOu800400MHx8t"
@@ -40,42 +41,45 @@ function App() {
 
 	return (
 		<GoogleOAuthProvider clientId={clientId}>
-			<AuthProvider>
-				<Router>
-					<div className="App">
-						<Suspense fallback={<div>Loading...</div>}>
-							<Routes>
-								<Route path="/login" element={<LoginPage />} />
-								<Route path="/" element={<LandingPage />} />
-								<Route path="/about" element={<About />} />
-								<Route path="/home" element={<Home />}>
-									<Route path="land" element={<LandingPage />} />
-									<Route path="sent" element={<Sent />} />
-									<Route path="profile" element={<Profile />} />
-									<Route path="billing" element={<Billing />} />
-									<Route path="settings" element={<Settings />} />
+			<Router>
+				<div className="App">
+					<Suspense fallback={<div>Loading...</div>}>
+						<Routes>
+							{/* Public Routes */}
+							<Route path="/login" element={<LoginPage />} />
+							<Route path="/" element={<LandingPage />} />
+							<Route path="/about" element={<About />} />
+							<Route path="/register" element={<Register />} />
+							<Route path="/price" element={<Pricing />} />
+							<Route path="/contact" element={<Contact />} />
+							<Route path="/privacy-policy" element={<PrivacyPolicy />} />
+							<Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+
+							{/* Protected Parent Route */}
+							<Route path="/home" element={<PrivateRoute element={Home} />}>
+								<Route path="sent" element={<Sent />} />
+								<Route path="profile" element={<Profile />} />
+								<Route path="billing" element={<Billing />} />
+								<Route path="settings" element={<Settings />} />
+								<Route path="schedule" element={<Schedule />} />
+								{clientSecret && (
 									<Route
 										path="pay"
 										element={
-											clientSecret && (
-												<Elements stripe={stripePromise} options={{ clientSecret }}>
-													<Payment />
-												</Elements>
-											)
+											<Elements stripe={stripePromise} options={{ clientSecret }}>
+												<Payment />
+											</Elements>
 										}
 									/>
-								</Route>
-								<Route path="/price" element={<Pricing />} />
-								<Route path="/contact" element={<Contact />} />
-								<Route path="/privacy-policy" element={<PrivacyPolicy />} />
-								<Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-								<Route path="/register" element={<Register />} />
-								<Route path="*" element={<LandingPage />} />
-							</Routes>
-						</Suspense>
-					</div>
-				</Router>
-			</AuthProvider>
+								)}
+							</Route>
+
+							{/* Fallback Route */}
+							<Route path="*" element={<Navigate to="/" replace />} />
+						</Routes>
+					</Suspense>
+				</div>
+			</Router>
 		</GoogleOAuthProvider>
 	);
 }

@@ -6,7 +6,6 @@ import Cookies from "js-cookie";
 import { GoogleLogin } from "@react-oauth/google";
 import { FaSun, FaMoon, FaGoogle, FaMicrosoft } from "react-icons/fa";
 import msalInstance from "../msalConfig";
-import { useAuth } from "../context/AuthContext";
 
 const LoginPage = () => {
 	const [email, setEmail] = useState("");
@@ -15,17 +14,9 @@ const LoginPage = () => {
 	const [emailError, setEmailError] = useState("");
 	const [passwordError, setPasswordError] = useState("");
 	const [isDarkTheme, setIsDarkTheme] = useState(false);
-	const { login } = useAuth();
 	const location = useLocation();
 	const navigate = useNavigate();
 	const from = location.state?.from?.pathname || "/home/sent";
-
-	useEffect(() => {
-		const token = Cookies.get("token");
-		if (token) {
-			navigate("/home/sent");
-		}
-	}, [navigate]);
 
 	const validateEmail = (email) => {
 		const emailRegex = /\S+@\S+\.\S+/;
@@ -33,8 +24,34 @@ const LoginPage = () => {
 	};
 
 	const validatePassword = (password) => {
-		const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/;
-		return passwordRegex.test(password);
+		const minLength = 8;
+		const hasUpperCase = /[A-Z]/.test(password);
+		const hasLowerCase = /[a-z]/.test(password);
+		const hasNumbers = /\d/.test(password);
+		const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+		if (password.length < minLength) {
+			setPasswordError("Password must be at least 8 characters long");
+			return false;
+		}
+		if (!hasUpperCase) {
+			setPasswordError("Password must contain at least one uppercase letter");
+			return false;
+		}
+		if (!hasLowerCase) {
+			setPasswordError("Password must contain at least one lowercase letter");
+			return false;
+		}
+		if (!hasNumbers) {
+			setPasswordError("Password must contain at least one number");
+			return false;
+		}
+		if (!hasSpecialChar) {
+			setPasswordError("Password must contain at least one special character");
+			return false;
+		}
+		setPasswordError("");
+		return true;
 	};
 
 	const handleEmailChange = (e) => {
@@ -50,24 +67,46 @@ const LoginPage = () => {
 	const handlePasswordChange = (e) => {
 		const value = e.target.value;
 		setPassword(value);
-		if (!validatePassword(value)) {
-			setPasswordError("Password must include letters, numbers, and special characters.");
-		} else {
-			setPasswordError("");
-		}
+		validatePassword(value);
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		
+		// Clear previous errors
+		setEmailError("");
+		setPasswordError("");
+		
+		// Validate both fields before proceeding
+		if (!email) {
+			setEmailError("Email is required");
+			return;
+		}
+		
+		if (!password) {
+			setPasswordError("Password is required");
+			return;
+		}
 
-		if (emailError || passwordError) return;
+		// Validate email format
+		if (!validateEmail(email)) {
+			setEmailError("Please enter a valid email address");
+			return;
+		}
+
+		// Validate password requirements
+		if (!validatePassword(password)) {
+			return; // validatePassword already sets the error message
+		}
 
 		try {
 			const response = await post("/login", { email, password }, false);
-			console.log("Login successful:", response);
-
-			login(response.token); // Use the login function from AuthContext
-			navigate(from, { replace: true });
+			if (response && response.token) {
+				localStorage.setItem('token', response.token);
+				navigate(from, { replace: true });
+			} else {
+				setEmailError("Invalid response from server");
+			}
 		} catch (error) {
 			console.error("Login failed:", error);
 			setEmailError("Invalid email or password.");
@@ -76,7 +115,7 @@ const LoginPage = () => {
 
 	const onGoogleSuccess = (credentialResponse) => {
 		console.log("Google Login Success:", credentialResponse);
-		login(credentialResponse.credential);
+		localStorage.setItem("token", credentialResponse.credential);
 		navigate(from, { replace: true });
 	};
 
@@ -90,7 +129,7 @@ const LoginPage = () => {
 			const loginResponse = await msalInstance.loginPopup({
 				scopes: ["user.read"],
 			});
-			login(loginResponse.accessToken);
+			localStorage.setItem("token", loginResponse.accessToken);
 			navigate(from, { replace: true });
 		} catch (error) {
 			console.error("Microsoft Login Failed:", error);

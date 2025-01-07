@@ -1,139 +1,144 @@
-import React, { useState, useEffect } from "react";
-import Cookies from "js-cookie";
-import { FaEdit, FaCamera, FaKey, FaShieldAlt, FaHistory, FaBell } from "react-icons/fa";
+import React from "react";
+import { FaCamera, FaEdit, FaBell, FaShieldAlt, FaKey, FaHistory, FaSignOutAlt } from "react-icons/fa";
 
-const Profile = ({ user }) => {
-    const [activeTab, setActiveTab] = useState('personal');
+const Profile = () => {
+	return (
+		<div className="h-full bg-slate-50/50  p-6">
+			<div className="max-w-4xl mx-auto">
+				{/* Header */}
+				<div className="text-center mb-8">
+					<div className="relative inline-block">
+						<div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg">
+							<img
+								src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+								alt="Profile"
+								className="w-full h-full object-cover"
+							/>
+						</div>
+						<button className="absolute bottom-0 right-0 p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors">
+							<FaCamera />
+						</button>
+					</div>
+					<h1 className="text-2xl font-bold text-gray-800 mt-4">John Doe</h1>
+					<p className="text-gray-500">john.doe@example.com</p>
+				</div>
 
-    user = {
-        name: "John Doe",
-        email: "john.doe@example.com",
-        profilePicture: "https://via.placeholder.com/150",
-        phone: "+1 234 567 8900",
-        recovery: "recovery@email.com",
-        lastLogin: "2 days ago",
-        location: "New York, USA"
-    };
+				{/* Profile Sections */}
+				<div className="grid gap-6">
+					{/* Personal Information */}
+					<div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+						<div className="flex justify-between items-center mb-6">
+							<h2 className="text-xl font-semibold text-gray-800">Personal Information</h2>
+							<button className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
+								<FaEdit className="text-gray-600" />
+							</button>
+						</div>
+						<div className="grid gap-4">
+							<div>
+								<label className="text-sm text-gray-500">Full Name</label>
+								<p className="text-gray-800">John Doe</p>
+							</div>
+							<div>
+								<label className="text-sm text-gray-500">Email</label>
+								<p className="text-gray-800">john.doe@example.com</p>
+							</div>
+							<div>
+								<label className="text-sm text-gray-500">Phone</label>
+								<p className="text-gray-800">+1 (555) 123-4567</p>
+							</div>
+						</div>
+					</div>
 
-    useEffect(() => {
-        // Extract tokens from URL
-        const params = new URLSearchParams(window.location.search);
-        const refreshToken = params.get("refreshToken");
-        const accessToken = params.get("accessToken");
+					{/* Quick Actions */}
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+						<button className="p-4 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all flex items-center gap-3">
+							<div className="p-3 bg-blue-50 text-blue-500 rounded-xl">
+								<FaBell />
+							</div>
+							<span className="font-medium text-gray-800">Notifications</span>
+						</button>
+						<button className="p-4 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all flex items-center gap-3">
+							<div className="p-3 bg-green-50 text-green-500 rounded-xl">
+								<FaShieldAlt />
+							</div>
+							<span className="font-medium text-gray-800">Security</span>
+						</button>
+						<button className="p-4 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all flex items-center gap-3">
+							<div className="p-3 bg-yellow-50 text-yellow-500 rounded-xl">
+								<FaKey />
+							</div>
+							<span className="font-medium text-gray-800">Change Password</span>
+						</button>
+					</div>
 
-        // Store tokens in cookies if available
-        if (refreshToken) {
-            Cookies.set("refreshToken", refreshToken, { secure: true, sameSite: "Strict" });
-        }
-        if (accessToken) {
-            Cookies.set("accessToken", accessToken, { secure: true, sameSite: "Strict" });
-        }
-    }, []);
+					{/* Security Settings */}
+					<div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+						<div className="flex justify-between items-center mb-6">
+							<h2 className="text-xl font-semibold text-gray-800">Security Settings</h2>
+						</div>
+						<div className="space-y-4">
+							<button className="w-full p-4 bg-white hover:bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between group transition-all">
+								<div className="flex items-center gap-3">
+									<div className="p-3 bg-blue-50 text-blue-500 rounded-xl group-hover:bg-blue-100">
+										<FaKey />
+									</div>
+									<div className="text-left">
+										<h3 className="font-medium text-gray-800">Change Password</h3>
+										<p className="text-sm text-gray-500">Update your password</p>
+									</div>
+								</div>
+								<FaEdit className="text-gray-400" />
+							</button>
 
-    const handleSignIn = async () => {
-        try {
-            const response = await fetch("http://localhost:4000/api/auth");
-            const data = await response.json();
-            window.location.href = data.url; // Redirect to Google OAuth URL
-        } catch (error) {
-            console.error("Error initiating OAuth flow", error);
-        }
-    };
+							<button className="w-full p-4 bg-white hover:bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between group transition-all">
+								<div className="flex items-center gap-3">
+									<div className="p-3 bg-purple-50 text-purple-500 rounded-xl group-hover:bg-purple-100">
+										<FaShieldAlt />
+									</div>
+									<div className="text-left">
+										<h3 className="font-medium text-gray-800">Two-Factor Auth</h3>
+										<p className="text-sm text-gray-500">Extra security for your account</p>
+									</div>
+								</div>
+								<FaEdit className="text-gray-400" />
+							</button>
+						</div>
+					</div>
 
-    return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Header */}
-            <div className="bg-white border-b">
-                <div className="max-w-6xl mx-auto px-4 py-4">
-                    <h1 className="text-2xl font-normal text-gray-800">Google Account</h1>
-                    <p className="text-sm text-gray-600">Manage your info, privacy, and security</p>
-                </div>
-            </div>
+					{/* Activity Log - Fixed Structure */}
+					<div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+						<div className="flex justify-between items-center mb-6">
+							<h2 className="text-xl font-semibold text-gray-800">Recent Activity</h2>
+							<button className="text-blue-500 text-sm hover:underline">View All</button>
+						</div>
+						<div className="space-y-4">
+							{[
+								{ action: "Password changed", date: "2 hours ago", icon: FaKey },
+								{ action: "Logged in from new device", date: "Yesterday", icon: FaHistory },
+								{ action: "Updated profile picture", date: "3 days ago", icon: FaCamera },
+							].map((activity, index) => (
+								<div key={index} className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50">
+									<div className="p-2 bg-gray-100 rounded-lg">
+										<activity.icon className="text-gray-600" />
+									</div>
+									<div>
+										<p className="font-medium text-gray-800">{activity.action}</p>
+										<p className="text-sm text-gray-500">{activity.date}</p>
+									</div>
+								</div>
+							))}
+						</div>
+					</div>
 
-            {/* Main Content */}
-            <div className="max-w-6xl mx-auto px-4 py-8">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-                    {/* Left Column - Profile Overview */}
-                    <div className="md:col-span-4">
-                        <div className="bg-white rounded-lg shadow-sm p-6 text-center">
-                            <div className="relative inline-block">
-                                <img 
-                                    src={user.profilePicture} 
-                                    alt="Profile" 
-                                    className="w-32 h-32 rounded-full mx-auto mb-4"
-                                />
-                                <button className="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50">
-                                    <FaCamera className="text-gray-600" />
-                                </button>
-                            </div>
-                            <h2 className="text-2xl font-medium text-gray-800">{user.name}</h2>
-                            <p className="text-gray-600 mb-4">{user.email}</p>
-                            <button className="text-blue-600 hover:text-blue-700 font-medium">
-                                Manage your Google Account
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Right Column - Details */}
-                    <div className="md:col-span-8">
-                        <div className="bg-white rounded-lg shadow-sm divide-y">
-                            <div className="p-6">
-                                <div className="flex justify-between items-center mb-4">
-                                    <h3 className="text-xl font-medium text-gray-800">Personal info</h3>
-                                    <button className="text-blue-600 hover:text-blue-700">
-                                        <FaEdit size={20} />
-                                    </button>
-                                </div>
-                                <div className="space-y-4">
-                                    <div className="flex justify-between items-center">
-                                        <div>
-                                            <p className="text-sm text-gray-500">Email</p>
-                                            <p className="text-gray-800">{user.email}</p>
-                                        </div>
-                                        <FaShieldAlt className="text-green-500" />
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <div>
-                                            <p className="text-sm text-gray-500">Phone</p>
-                                            <p className="text-gray-800">{user.phone}</p>
-                                        </div>
-                                        <FaShieldAlt className="text-green-500" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="p-6">
-                                <h3 className="text-xl font-medium text-gray-800 mb-4">Security</h3>
-                                <div className="space-y-4">
-                                    <div className="flex items-center">
-                                        <FaKey className="text-gray-400 mr-4" />
-                                        <div>
-                                            <p className="text-gray-800 font-medium">Password</p>
-                                            <p className="text-sm text-gray-500">Last changed 3 months ago</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center">
-                                        <FaBell className="text-gray-400 mr-4" />
-                                        <div>
-                                            <p className="text-gray-800 font-medium">Recovery options</p>
-                                            <p className="text-sm text-gray-500">{user.recovery}</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center">
-                                        <FaHistory className="text-gray-400 mr-4" />
-                                        <div>
-                                            <p className="text-gray-800 font-medium">Recent activity</p>
-                                            <p className="text-sm text-gray-500">Last login: {user.lastLogin}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+					{/* Logout Button - Fixed Structure */}
+					<button className="w-full p-4 bg-red-50 hover:bg-red-100 rounded-xl flex items-center justify-center gap-2 text-red-600 font-medium transition-colors">
+						<FaSignOutAlt />
+						<span>Sign Out</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default Profile;

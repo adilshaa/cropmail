@@ -91,16 +91,16 @@ const EmailInbox = ({ prompt }) => {
 	};
 
 	return (
-		<div className="bg-white rounded-lg shadow-md max-w-full mx-auto mb-2">
+		<div className="bg-white rounded-xl shadow-lg max-w-full mx-auto mb-4">
 			<div
-				className="px-6 py-4 flex items-center justify-between cursor-pointer hover:bg-gray-50"
+				className="px-6 py-4 flex items-center justify-between cursor-pointer hover:bg-gray-50/80 transition-all"
 				onClick={() => setIsOpen(!isOpen)}
 			>
 				{isOpen ? (
 					<>
 						<h2 className="text-xl font-semibold text-gray-800">New Message</h2>
 						<svg
-							className="w-6 h-6 transform rotate-180"
+							className="w-5 h-5 text-gray-600 transform rotate-180 transition-transform"
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"
@@ -110,21 +110,21 @@ const EmailInbox = ({ prompt }) => {
 					</>
 				) : (
 					<div className="flex items-center justify-between w-full">
-						<div className="flex items-center space-x-4 flex-1">
-							<span className="text-sm text-gray-600 w-32 truncate">{getSummaryText()}</span>
-							<span className="text-sm text-gray-500 w-64 truncate">{subject || "No subject"}</span>
+						<div className="flex items-center space-x-6 flex-1">
+							<span className="text-sm font-medium text-gray-700 w-40 truncate">{getSummaryText()}</span>
+							<span className="text-sm text-gray-500 w-72 truncate">{subject || "No subject"}</span>
 						</div>
-						<div className="flex items-center space-x-3">
+						<div className="flex items-center space-x-4">
 							<button
 								onClick={(e) => {
 									e.stopPropagation();
 									handleSend();
 								}}
-								className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded-md text-sm transition-colors duration-200 flex items-center"
+								className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
 							>
-								<span>Send</span>
+								Send
 							</button>
-							<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
 							</svg>
 						</div>
@@ -134,7 +134,7 @@ const EmailInbox = ({ prompt }) => {
 
 			<div
 				className={`transition-all duration-300 ease-in-out overflow-hidden ${
-					isOpen ? "max-h-[1000px] border-t" : "max-h-0"
+					isOpen ? "max-h-[1000px] border-t border-gray-100" : "max-h-0"
 				}`}
 			>
 				<div className="p-6">
@@ -191,12 +191,12 @@ const EmailInbox = ({ prompt }) => {
 					</div>
 
 					{/* Action Buttons - Fixed Structure */}
-					<div className="flex items-center justify-between">
+					<div className="flex items-center justify-between mt-6">
 						<button
 							onClick={handleSend}
-							className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition-colors duration-200 flex items-center"
+							className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2"
 						>
-							<span className="mr-2">Send</span>
+							<span>Send</span>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								className="h-4 w-4"
@@ -211,7 +211,7 @@ const EmailInbox = ({ prompt }) => {
 								setEmails([]);
 								setSubject("");
 							}}
-							className="text-gray-600 hover:text-gray-800 px-4 py-2"
+							className="text-gray-600 hover:text-gray-800 px-4 py-2 font-medium"
 						>
 							Discard
 						</button>

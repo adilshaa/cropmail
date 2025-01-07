@@ -1,6 +1,5 @@
 // Home.jsx
 import React, { useState } from "react";
-import { FaPaperPlane } from "react-icons/fa";
 import { Outlet } from "react-router-dom"; // Import Outlet for nested routes
 import Sidebar from "../components/Sidenav";
 import { post } from "../services/apiService"; // Import the post method
@@ -31,10 +30,8 @@ const Home = () => {
 		<div className="flex h-screen bg-gray-100 overflow-hidden">
 			<Sidebar selected={selected} setSelected={setSelected} />
 			
-			<div className="flex-1 flex flex-col overflow-hidden">
-				<main className="flex-1 overflow-y-auto p-4">
-					<Outlet />
-				</main>
+			<div className="flex-1 overflow-auto">
+				<Outlet />
 			</div>
 		</div>
 	);

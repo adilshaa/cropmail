@@ -37,7 +37,7 @@ const Sent = () => {
 
 	return (
 		<div className="flex flex-col lg:flex-row bg-gray-100 min-h-screen">
-			<div className="flex flex-col flex-1 relative overflow-hidden">
+			<div className="flex flex-col flex-1  overflow-hidden">
 				<main className="flex-1 px-2 overflow-y-auto pb-24">
 					<div className="space-y-4">
 						<h2 className="text-2xl font-bold mb-2">{selected}</h2>

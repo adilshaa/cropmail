@@ -10,7 +10,7 @@ An email client application built with React and Material-UI.
 
 ## Features
 
-- Email management
-- Dark mode support
-- Customizable settings
-- Auto-save drafts
+-   Email management
+-   Dark mode support
+-   Customizable settings
+-   Auto-save drafts

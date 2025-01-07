@@ -4,26 +4,40 @@ import Cookies from "js-cookie";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-	const [isAuthenticated, setIsAuthenticated] = useState(false);
-	const [loading, setLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		const token = Cookies.get("token");
-		setIsAuthenticated(!!token);
-		setLoading(false);
-	}, []);
+    useEffect(() => {
+        checkAuth();
+    }, []);
 
-	const login = (token) => {
-		Cookies.set("token", token, { expires: 7 });
-		setIsAuthenticated(true);
-	};
+    const checkAuth = () => {
+        const token = Cookies.get("token");
+        if (token) {
+            setIsAuthenticated(true);
+        } else {
+            setIsAuthenticated(false);
+        }
+        setLoading(false);
+    };
 
-	const logout = () => {
-		Cookies.remove("token");
-		setIsAuthenticated(false);
-	};
+    const login = (token) => {
+        Cookies.set("token", token, { expires: 7, sameSite: 'strict' });
+        setIsAuthenticated(true);
+        setLoading(false);
+    };
 
-	return <AuthContext.Provider value={{ isAuthenticated, login, logout, loading }}>{children}</AuthContext.Provider>;
+    const logout = () => {
+        Cookies.remove("token");
+        setIsAuthenticated(false);
+        setLoading(false);
+    };
+
+    return (
+        <AuthContext.Provider value={{ isAuthenticated, login, logout, loading }}>
+            {!loading && children}
+        </AuthContext.Provider>
+    );
 };
 
 export const useAuth = () => useContext(AuthContext);
