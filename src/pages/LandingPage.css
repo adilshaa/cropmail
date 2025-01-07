@@ -1,0 +1,131 @@
+body {
+	font-family: "Poppins", sans-serif;
+}
+
+/* LandingPage.css */
+.animated-text {
+	background: linear-gradient(90deg, rgb(242, 49, 49), rgb(246, 246, 41), rgb(253, 180, 192));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	animation: typing 1s steps(30, end), blink-caret 0.75s step-end infinite;
+	display: inline-block;
+	white-space: nowrap;
+	overflow: hidden;
+	border-right: 0.1em solid rgb(249, 212, 145);
+}
+
+@keyframes typing {
+	from {
+		width: 0;
+	}
+	to {
+		width: 100%;
+	}
+}
+
+@keyframes blink-caret {
+	from,
+	to {
+		border-color: transparent;
+	}
+	50% {
+		border-color: rgb(238, 191, 103);
+	}
+}
+
+.blurred-background {
+	position: absolute;
+	top: 17%;
+	left: 50%;
+	width: 829px;
+	height: 256px;
+	background: radial-gradient(circle, rgba(255, 0, 0, 0.3), rgba(255, 255, 0, 0.3), rgba(255, 192, 203, 0.3));
+	filter: blur(89px);
+	transform: translate(-50%, -50%);
+	z-index: 0;
+}
+
+.gradient-button {
+	background: linear-gradient(45deg, #1e90ff, #00bfff);
+	transition: background 0.3s ease;
+}
+
+.gradient-button:hover {
+	background: linear-gradient(45deg, #1c86ee, #1e90ff);
+}
+.icon {
+	display: inline-block;
+}
+
+.grid {
+	display: grid;
+	gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+	.grid-cols-2 {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (min-width: 1024px) {
+	.grid-cols-3 {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+}
+
+@keyframes rotate {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.rotate {
+	animation: rotate 15s linear infinite;
+}
+
+@keyframes gradient-xy {
+	0%,
+	100% {
+		background-size: 400% 400%;
+		background-position: left top;
+	}
+	50% {
+		background-size: 200% 200%;
+		background-position: right bottom;
+	}
+}
+
+@keyframes blob {
+	0% {
+		transform: translate(0px, 0px) scale(1);
+	}
+	33% {
+		transform: translate(30px, -50px) scale(1.1);
+	}
+	66% {
+		transform: translate(-20px, 20px) scale(0.9);
+	}
+	100% {
+		transform: translate(0px, 0px) scale(1);
+	}
+}
+
+.animate-gradient-xy {
+	animation: gradient-xy 15s ease infinite;
+}
+
+.animate-blob {
+	animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+	animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+	animation-delay: 4s;
+}
