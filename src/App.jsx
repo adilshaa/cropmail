@@ -36,7 +36,7 @@ const PaymentSuccess = () => {
 		}, 3000);
 
 		return () => clearTimeout(timer);
-	}, [navigate]);
+	}, []); // Empty dependency array since we only want this to run once
 
 	return (
 		<div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -82,14 +82,14 @@ function App() {
 
 								{/* Modified Payment Routes */}
 								<Route path="billing" element={<Billing />} />
-									<Route
-										path="pay"
-										element={
-												<StripeWrapper>
-													<Payment />
-												</StripeWrapper>
-										}
-									/>
+								<Route
+									path="pay"
+									element={
+										<StripeWrapper>
+											<Payment />
+										</StripeWrapper>
+									}
+								/>
 								<Route path="payment-success" element={<PaymentSuccess />} />
 							</Route>
 

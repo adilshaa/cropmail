@@ -1,17 +1,16 @@
 // client/src/components/PrivateRoute.jsx
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import React from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import Cookies from "js-cookie";
 
-const PrivateRoute = ({ children }) => {
-  const location = useLocation();
-  const token = localStorage.getItem('token');
+const PrivateRoute = ({ element: Component, ...rest }) => {
+	const token = Cookies.get("token");
 
-  if (!token) {
-    // Redirect to login while saving the attempted location
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
+	if (!token) {
+		return <Navigate to="/login" replace />;
+	}
 
-  return children;
+	return <Component {...rest} />;
 };
 
 export default PrivateRoute;

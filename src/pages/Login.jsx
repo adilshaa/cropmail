@@ -20,7 +20,7 @@ const LoginPage = () => {
 
 	useEffect(() => {
 		// Check if user is already logged in
-		const token = localStorage.getItem('token');
+		const token = Cookies.get("token");
 		if (token) {
 			navigate(from, { replace: true });
 		}
@@ -110,7 +110,7 @@ const LoginPage = () => {
 		try {
 			const response = await post("/login", { email, password }, false);
 			if (response && response.token) {
-				localStorage.setItem("token", response.token);
+				Cookies.set("token", response.token);
 				// Use replace to prevent back navigation to login
 				navigate(from, { replace: true });
 			} else {
@@ -174,13 +174,14 @@ const LoginPage = () => {
 				<div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 to-purple-600/30 animate-gradient-xy"></div>
 				<div className="relative z-10 max-w-md mx-auto px-4">
 					<div className={`bg-white dark:bg-gray-800 rounded-lg p-8 shadow-xl`}>
-						<h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
-							Welcome Back
-						</h2>
+						<h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">Welcome Back</h2>
 
 						<form onSubmit={handleSubmit}>
 							<div className="mb-4">
-								<label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="email">
+								<label
+									className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2"
+									htmlFor="email"
+								>
 									Email
 								</label>
 								<input
@@ -196,7 +197,10 @@ const LoginPage = () => {
 								{emailError && <p className="text-red-500 text-xs italic">{emailError}</p>}
 							</div>
 							<div className="mb-6">
-								<label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="password">
+								<label
+									className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2"
+									htmlFor="password"
+								>
 									Password
 								</label>
 								<div className="relative">
