@@ -10,7 +10,7 @@ const EmailInbox = ({ prompt }) => {
 	const [isInvalidEmail, setIsInvalidEmail] = useState(false);
 	const [subject, setSubject] = useState(""); // State for subject
 	const [refreshToken, setRefreshToken] = useState("");
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState(true);
 
 	useEffect(() => {
 		// Retrieve the refresh token from cookies
@@ -65,7 +65,8 @@ const EmailInbox = ({ prompt }) => {
 		const payload = {
 			emails,
 			subject,
-			template: prompt, // Assuming prompt is used as the template
+			template: prompt.content,
+			emailType: prompt.type, // Add email type to payload
 			refreshToken: refreshToken || "",
 		};
 

@@ -12,6 +12,10 @@ const Sent = () => {
 	const [prompt, setPrompt] = useState(""); // State to hold the prompt
 	const [response, setResponse] = useState(null); // State to hold the API response
 	const [editorContent, setEditorContent] = useState(""); // State to hold editor content
+	const [emailContent, setEmailContent] = useState({
+		content: "",
+		type: "template"
+	});
 
 	const handlePromptChange = (e) => {
 		setPrompt(e.target.value);
@@ -31,8 +35,8 @@ const Sent = () => {
 	};
 
 	const handleEditorContentChange = (newContent) => {
-		setEditorContent(newContent);
-		console.log("Editor content changed:", newContent);
+		setEmailContent(newContent);
+		console.log("Email content updated:", newContent);
 	};
 
 	return (
@@ -41,7 +45,7 @@ const Sent = () => {
 				<main className="flex-1 px-2 overflow-y-auto pb-24">
 					<div className="space-y-4">
 						<h2 className="text-2xl font-bold mb-2">{selected}</h2>
-						<EmailInbox prompt={editorContent} />
+						<EmailInbox prompt={emailContent} />
 						<EmailPreview apiResponse={response} onContentChange={handleEditorContentChange} />
 					</div>
 				</main>
