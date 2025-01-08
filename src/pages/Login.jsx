@@ -18,6 +18,14 @@ const LoginPage = () => {
 	const navigate = useNavigate();
 	const from = location.state?.from?.pathname || "/home/sent";
 
+	useEffect(() => {
+		// Check if user is already logged in
+		const token = localStorage.getItem('token');
+		if (token) {
+			navigate(from, { replace: true });
+		}
+	}, [from, navigate]); // Add proper dependencies
+
 	const validateEmail = (email) => {
 		const emailRegex = /\S+@\S+\.\S+/;
 		return emailRegex.test(email);
@@ -103,6 +111,7 @@ const LoginPage = () => {
 			const response = await post("/login", { email, password }, false);
 			if (response && response.token) {
 				localStorage.setItem("token", response.token);
+				// Use replace to prevent back navigation to login
 				navigate(from, { replace: true });
 			} else {
 				setEmailError("Invalid response from server");
@@ -138,13 +147,9 @@ const LoginPage = () => {
 	};
 
 	return (
-		<div className={`${isDarkTheme ? "bg-gray-900 text-white" : "bg-white text-gray-900"} min-h-screen`}>
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
 			{/* Header with Glass Effect */}
-			<nav
-				className={`fixed w-full backdrop-blur-md bg-opacity-70 ${
-					isDarkTheme ? "bg-gray-900/70" : "bg-white/70"
-				} z-50 px-5 sm:px-20 py-4`}
-			>
+			<nav className="fixed w-full backdrop-blur-md bg-white/70 dark:bg-gray-900/70 z-50 px-5 sm:px-20 py-4">
 				<div className="flex justify-between items-center">
 					<h1
 						className={`text-2xl font-bold bg-gradient-to-r ${
@@ -168,14 +173,14 @@ const LoginPage = () => {
 			<div className="relative pt-24 pb-32">
 				<div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 to-purple-600/30 animate-gradient-xy"></div>
 				<div className="relative z-10 max-w-md mx-auto px-4">
-					<div className={`${isDarkTheme ? "bg-gray-800" : "bg-white"} rounded-lg p-8 shadow-xl`}>
-						<h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+					<div className={`bg-white dark:bg-gray-800 rounded-lg p-8 shadow-xl`}>
+						<h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
 							Welcome Back
 						</h2>
 
 						<form onSubmit={handleSubmit}>
 							<div className="mb-4">
-								<label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+								<label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="email">
 									Email
 								</label>
 								<input
@@ -183,7 +188,7 @@ const LoginPage = () => {
 									id="email"
 									value={email}
 									onChange={handleEmailChange}
-									className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+									className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
 										emailError ? "border-red-500" : ""
 									}`}
 									placeholder="Enter your email"
@@ -191,7 +196,7 @@ const LoginPage = () => {
 								{emailError && <p className="text-red-500 text-xs italic">{emailError}</p>}
 							</div>
 							<div className="mb-6">
-								<label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+								<label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="password">
 									Password
 								</label>
 								<div className="relative">
@@ -200,7 +205,7 @@ const LoginPage = () => {
 										id="password"
 										value={password}
 										onChange={handlePasswordChange}
-										className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+										className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
 											passwordError ? "border-red-500" : ""
 										}`}
 										placeholder="Enter your password"
@@ -208,7 +213,7 @@ const LoginPage = () => {
 									<button
 										type="button"
 										onClick={() => setShowPassword(!showPassword)}
-										className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+										className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-gray-600 dark:text-gray-400"
 									>
 										{showPassword ? "Hide" : "Show"}
 									</button>
@@ -274,7 +279,7 @@ const LoginPage = () => {
 							</div>
 						</div>
 
-						<p className="mt-8 text-center text-sm text-gray-500">
+						<p className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
 							Don't have an account?{" "}
 							<Link to="/register" className="text-blue-500 hover:text-blue-600 font-medium">
 								Sign up
