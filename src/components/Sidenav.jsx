@@ -35,7 +35,7 @@ const NavItem = ({ icon, text, onClick, isSelected }) => {
 			>
 				{icon}
 				{showTooltip && (
-					<div className="absolute left-[calc(100%+0.75rem)] top-1/2 -translate-y-1/2 px-4 py-2 bg-white/90 backdrop-blur-sm text-gray-800 text-sm rounded-xl whitespace-nowrap shadow-xl pointer-events-none z-[9999] border border-gray-100/20">
+					<div className="absolute left-[calc(100%+0.75rem)] top-1/2 -translate-y-1/2 px-4 py-2 bg-white/90 backdrop-blur-sm text-gray-800 text-sm rounded-xl whitespace-nowrap shadow-xl pointer-events-none z-20 border border-gray-100/20">
 						{text}
 						<div className="absolute right-full top-1/2 -translate-y-1/2 border-[6px] border-transparent border-r-white/90 pointer-events-none"></div>
 					</div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from "react"; // Remove useState, useEffect
+import React, { useState, useEffect, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import PublicRoute from "./components/PublicRoute";
@@ -15,6 +15,7 @@ import About from "./pages/About";
 import Register from "./pages/Register";
 import Compose from "./pages/Compose";
 import Drafts from "./pages/Drafts";
+import TemplateEditor from "./pages/TemplateEditor"; // Import the new page
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import StripeWrapper from "./components/StripeWrapper";
@@ -22,21 +23,20 @@ import Payment from "./pages/Payment";
 import Pricing from "./pages/Plans";
 import Settings from "./components/Settings";
 import Schedule from "./components/Schedule";
+import { SnackbarProvider } from './contexts/SnackbarContext';
 
 const clientId = "373314217149-ks6armu585104gmhg10drdk1odl70s3n.apps.googleusercontent.com";
 
-// Add PaymentSuccess component
 const PaymentSuccess = () => {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		// Show success message and redirect after 3 seconds
 		const timer = setTimeout(() => {
 			navigate("/home");
 		}, 3000);
 
 		return () => clearTimeout(timer);
-	}, []); // Empty dependency array since we only want this to run once
+	}, []);
 
 	return (
 		<div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -52,53 +52,56 @@ const PaymentSuccess = () => {
 function App() {
 	return (
 		<GoogleOAuthProvider clientId={clientId}>
-			<Router>
-				<div className="App">
-					<Suspense fallback={<div>Loading...</div>}>
-						<Routes>
-							{/* Public Routes */}
-							<Route path="/login" element={<PublicRoute element={LoginPage} />} />
-							<Route path="/register" element={<PublicRoute element={Register} />} />
-							<Route path="/" element={<LandingPage />} />
-							<Route path="/about" element={<About />} />
-							<Route path="/price" element={<Pricing />} />
-							<Route path="/contact" element={<Contact />} />
-							<Route path="/privacy-policy" element={<PrivacyPolicy />} />
-							<Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+			 <SnackbarProvider>
+				<Router>
+					<div className="App">
+						<Suspense fallback={<div>Loading...</div>}>
+							<Routes>
+								{/* Public Routes */}
+								<Route path="/login" element={<PublicRoute element={LoginPage} />} />
+								<Route path="/register" element={<PublicRoute element={Register} />} />
+								<Route path="/" element={<LandingPage />} />
+								<Route path="/about" element={<About />} />
+								<Route path="/price" element={<Pricing />} />
+								<Route path="/contact" element={<Contact />} />
+								<Route path="/privacy-policy" element={<PrivacyPolicy />} />
+								<Route path="/terms-and-conditions" element={<TermsAndConditions />} />
 
-							{/* Protected Parent Route */}
-							<Route path="/home" element={<PrivateRoute element={Home} />}>
-								{/* Email Management Routes */}
-								<Route index element={<Navigate to="inbox" replace />} />
-								<Route path="inbox" element={<Sent />} />
-								<Route path="sent" element={<Sent />} />
-								<Route path="drafts" element={<Drafts />} />
-								<Route path="compose" element={<Compose />} />
-								<Route path="schedule" element={<Schedule />} />
+								{/* Protected Parent Route */}
+								<Route path="/home" element={<PrivateRoute element={Home} />}>
+									{/* Email Management Routes */}
+									<Route index element={<Navigate to="inbox" replace />} />
+									<Route path="inbox" element={<Sent />} />
+									<Route path="sent" element={<Sent />} />
+									<Route path="drafts" element={<Drafts />} />
+									<Route path="compose" element={<Compose />} />
+									<Route path="schedule" element={<Schedule />} />
+									<Route path="template-editor" element={<TemplateEditor />} /> {/* Add new route */}
 
-								{/* User Management Routes */}
-								<Route path="profile" element={<Profile />} />
-								<Route path="settings" element={<Settings />} />
+									{/* User Management Routes */}
+									<Route path="profile" element={<Profile />} />
+									<Route path="settings" element={<Settings />} />
 
-								{/* Modified Payment Routes */}
-								<Route path="billing" element={<Billing />} />
-								<Route
-									path="pay"
-									element={
-										<StripeWrapper>
-											<Payment />
-										</StripeWrapper>
-									}
-								/>
-								<Route path="payment-success" element={<PaymentSuccess />} />
-							</Route>
+									{/* Modified Payment Routes */}
+									<Route path="billing" element={<Billing />} />
+									<Route
+										path="pay"
+										element={
+											<StripeWrapper>
+												<Payment />
+											</StripeWrapper>
+										}
+									/>
+									<Route path="payment-success" element={<PaymentSuccess />} />
+								</Route>
 
-							{/* Fallback Route */}
-							{/* <Route path="*" element={<Navigate to="/" replace />} /> */}
-						</Routes>
-					</Suspense>
-				</div>
-			</Router>
+								{/* Fallback Route */}
+								{/* <Route path="*" element={<Navigate to="/" replace />} /> */}
+							</Routes>
+						</Suspense>
+					</div>
+				</Router>
+			</SnackbarProvider>
 		</GoogleOAuthProvider>
 	);
 }
