@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { FaEye, FaCode } from "react-icons/fa";
 import Editor from "@monaco-editor/react";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+// import "react-quill/dist/quill.snow.css";
 
 const EmailPreview = ({ apiResponse, onContentChange }) => {
 	const [activeTab, setActiveTab] = useState("preview");
