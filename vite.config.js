@@ -11,4 +11,5 @@ if (typeof globalThis.structuredClone !== "function") {
 // https://vite.dev/config/
 export default defineConfig({
 	plugins: [react()],
+	assetsInclude: ['**/*.html'],
 });

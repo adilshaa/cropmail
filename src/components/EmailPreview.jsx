@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { FaEye, FaCode } from "react-icons/fa";
 import Editor from "@monaco-editor/react";
-import CustomEditor from './CustomEditor';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const EmailPreview = ({ apiResponse, onContentChange }) => {
 	const [activeTab, setActiveTab] = useState("preview");
@@ -90,6 +91,29 @@ const EmailPreview = ({ apiResponse, onContentChange }) => {
 		setSelectedEmailType(type);
 	};
 
+	const modules = {
+		toolbar: [
+			[{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+			[{ 'font': [] }],
+			[{ 'size': ['small', false, 'large', 'huge'] }],
+			['bold', 'italic', 'underline', 'strike'],
+			[{ 'color': [] }, { 'background': [] }],
+			[{ 'list': 'ordered'}, { 'list': 'bullet' }],
+			[{ 'align': [] }],
+			['link', 'image'],
+			['clean']
+		],
+	};
+
+	const formats = [
+		'header', 'font', 'size',
+		'bold', 'italic', 'underline', 'strike',
+		'color', 'background',
+		'list', 'bullet',
+		'align',
+		'link', 'image'
+	];
+
 	return (
 		<div className="bg-white rounded-lg shadow-md max-w-full mx-auto mb-2">
 			<div className="border-b px-6 py-4 flex items-center justify-between">
@@ -146,9 +170,13 @@ const EmailPreview = ({ apiResponse, onContentChange }) => {
 				<div className="h-[470px]">
 					{activeTab === "preview" ? (
 						selectedEmailType === "text" ? (
-							<CustomEditor
+							<ReactQuill
+								theme="snow"
 								value={htmlContent}
 								onChange={handleEditorChange}
+								modules={modules}
+								formats={formats}
+								className="h-[400px] mb-12"
 							/>
 						) : (
 							<iframe

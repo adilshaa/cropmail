@@ -1,5 +1,5 @@
-import React, { useState, useEffect, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import React, { useState, useEffect, Suspense } from "react"; // Remove useState, useEffect
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import PublicRoute from "./components/PublicRoute";
 import LoginPage from "./pages/Login";
@@ -13,33 +13,43 @@ import TermsAndConditions from "./components/TermsAndConditions";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Register from "./pages/Register";
+import Compose from "./pages/Compose";
+import Drafts from "./pages/Drafts";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { loadStripe } from "@stripe/stripe-js";
+import StripeWrapper from "./components/StripeWrapper";
 import Payment from "./pages/Payment";
-import { Elements } from "@stripe/react-stripe-js";
-import { post } from "./services/apiService";
 import Pricing from "./pages/Plans";
 import Settings from "./components/Settings";
 import Schedule from "./components/Schedule";
 
-const stripePromise = loadStripe(
-	"pk_test_51QZz8CJiFOOk4zjno8t5Z0TR17DSktasAndTdOfamjjOdAMjGH846nwwBXWZt4y9mgylRfTedw4xQg2Is1gYzOu800400MHx8t"
-);
-
 const clientId = "373314217149-ks6armu585104gmhg10drdk1odl70s3n.apps.googleusercontent.com";
 
-function App() {
-	const [clientSecret, setClientSecret] = useState("");
+// Add PaymentSuccess component
+const PaymentSuccess = () => {
+	const navigate = useNavigate();
 
 	useEffect(() => {
-		// Fetch the client secret from your server
-		post("/api/create-payment-intent", { amount: 1000 }) // Example amount
-			.then((res) => res)
-			.then((data) => setClientSecret(data.clientSecret))
-			.catch((error) => console.error("Error fetching client secret:", error));
-	}, []);
+		// Show success message and redirect after 3 seconds
+		const timer = setTimeout(() => {
+			navigate("/home");
+		}, 3000);
 
+		return () => clearTimeout(timer);
+	}, [navigate]);
+
+	return (
+		<div className="flex items-center justify-center min-h-screen bg-gray-50">
+			<div className="text-center p-8 bg-white rounded-xl shadow-lg">
+				<div className="text-green-500 text-5xl mb-4">✓</div>
+				<h2 className="text-2xl font-bold text-gray-800 mb-2">Payment Successful!</h2>
+				<p className="text-gray-600">Redirecting to your dashboard...</p>
+			</div>
+		</div>
+	);
+};
+
+function App() {
 	return (
 		<GoogleOAuthProvider clientId={clientId}>
 			<Router>
@@ -58,25 +68,33 @@ function App() {
 
 							{/* Protected Parent Route */}
 							<Route path="/home" element={<PrivateRoute element={Home} />}>
+								{/* Email Management Routes */}
+								<Route index element={<Navigate to="inbox" replace />} />
+								<Route path="inbox" element={<Sent />} />
 								<Route path="sent" element={<Sent />} />
-								<Route path="profile" element={<Profile />} />
-								<Route path="billing" element={<Billing />} />
-								<Route path="settings" element={<Settings />} />
+								<Route path="drafts" element={<Drafts />} />
+								<Route path="compose" element={<Compose />} />
 								<Route path="schedule" element={<Schedule />} />
-								{clientSecret && (
+
+								{/* User Management Routes */}
+								<Route path="profile" element={<Profile />} />
+								<Route path="settings" element={<Settings />} />
+
+								{/* Modified Payment Routes */}
+								<Route path="billing" element={<Billing />} />
 									<Route
 										path="pay"
 										element={
-											<Elements stripe={stripePromise} options={{ clientSecret }}>
-												<Payment />
-											</Elements>
+												<StripeWrapper>
+													<Payment />
+												</StripeWrapper>
 										}
 									/>
-								)}
+								<Route path="payment-success" element={<PaymentSuccess />} />
 							</Route>
 
 							{/* Fallback Route */}
-							<Route path="*" element={<Navigate to="/" replace />} />
+							{/* <Route path="*" element={<Navigate to="/" replace />} /> */}
 						</Routes>
 					</Suspense>
 				</div>

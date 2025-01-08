@@ -1,70 +1,77 @@
 import React, { useState, useRef } from "react";
 import { 
-    FaCheck, 
-    FaTimes, 
-    FaSun, 
-    FaMoon,
-    FaTwitter, 
-    FaFacebook, 
-    FaLinkedin, 
-    FaInstagram,
-    FaBars
+    FaCheck, FaTimes, FaSun, FaMoon,
+    FaTwitter, FaFacebook, FaLinkedin, FaInstagram
 } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Plans = () => {
     const [isDarkTheme, setIsDarkTheme] = useState(false);
-    const [hoveredMenu, setHoveredMenu] = useState(null);
-
-    const menuRefs = {
-        Home: useRef(null),
-        About: useRef(null),
-        Contact: useRef(null),
-    };
+    const navigate = useNavigate();
 
     const toggleTheme = () => {
         setIsDarkTheme(!isDarkTheme);
     };
 
+    const handleSelectPlan = (planId) => {
+        // Check if user is logged in by looking for token or user data
+        const isLoggedIn = localStorage.getItem('token'); // or however you check authentication
+        
+        if (isLoggedIn) {
+            navigate(`/home/pay?plan=${planId}`);
+        } else {
+            navigate('/login', { state: { redirectTo: `/home/pay?plan=${planId}` } });
+        }
+    };
+
     const plans = [
         {
-            name: "Free",
-            price: "$0",
-            period: "year",
-            description: "Basic features for personal use.",
+            id: 1,
+            name: "Basic",
+            price: "$9.99",
+            period: "month",
+            description: "Perfect for starters",
             features: [
-                { name: "Basic Support", included: true },
-                { name: "Limited Access", included: true },
-                { name: "Community Access", included: false },
+                { name: "1,000 Email Credits", included: true },
+                { name: "Basic Templates", included: true },
+                { name: "Email Support", included: true },
+                { name: "Analytics Dashboard", included: false },
+                { name: "Custom Domain", included: false },
             ],
         },
         {
+            id: 2,
             name: "Professional",
-            price: "$49",
-            period: "year",
-            description: "Advanced features for professionals.",
+            price: "$19.99",
+            period: "month",
+            description: "Most popular choice",
             features: [
+                { name: "10,000 Email Credits", included: true },
+                { name: "Premium Templates", included: true },
                 { name: "Priority Support", included: true },
-                { name: "Full Access", included: true },
-                { name: "Community Access", included: true },
+                { name: "Advanced Analytics", included: true },
+                { name: "Custom Domain", included: true },
             ],
         },
         {
-            name: "Organizations",
-            price: "$99",
-            period: "year",
-            description: "Comprehensive for organizations.",
+            id: 3,
+            name: "Enterprise",
+            price: "$49.99",
+            period: "month",
+            description: "For large organizations",
             features: [
-                { name: "Dedicated Support", included: true },
-                { name: "Unlimited Access", included: true },
-                { name: "Community Access", included: true },
+                { name: "Unlimited Email Credits", included: true },
+                { name: "Custom Templates", included: true },
+                { name: "24/7 Support", included: true },
+                { name: "Advanced Analytics", included: true },
+                { name: "Multiple Domains", included: true },
             ],
-        },
+        }
     ];
 
     return (
         <div className={`${isDarkTheme ? "bg-gray-900 text-white" : "bg-white text-gray-900"} min-h-screen`}>
-            {/* Modern Navbar with Glass Effect */}
+            {/* Navbar */}
             <nav className={`fixed w-full backdrop-blur-md bg-opacity-70 ${
                 isDarkTheme ? "bg-gray-900/70" : "bg-white/70"
             } z-50 px-5 sm:px-20 py-4`}>
@@ -111,75 +118,63 @@ const Plans = () => {
                 </div>
             </nav>
 
-            {/* Hero Section with Pricing Focus */}
-            <main className="min-h-[20vh] flex flex-col items-center justify-center relative px-5 sm:px-4 pt-20 pb-8">
-                {/* Animated Background Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 to-purple-600/30 animate-gradient-xy"></div>
-                
-                {/* Content */}
-                <div className="relative z-10 text-center max-w-4xl mx-auto">
-                    <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-                        Choose Your Perfect Plan
-                    </h2>
-                    <p className={`text-base md:text-lg ${isDarkTheme ? "text-gray-300" : "text-gray-700"} mb-4`}>
-                        Scale your email marketing with our flexible pricing options
+            {/* Hero Section */}
+            <div className="pt-28 pb-12 px-4">
+                <div className="max-w-3xl mx-auto text-center">
+                    <h1 className="text-4xl md:text-5xl font-bold mb-6">
+                        Choose the Perfect Plan for Your Business
+                    </h1>
+                    <p className="text-lg text-gray-600 mb-8">
+                        Start with a 14-day free trial. No credit card required.
                     </p>
                 </div>
-            </main>
+            </div>
 
-            {/* Pricing Cards Section - Adjusted top padding */}
-            <section className="w-full max-w-6xl mx-auto py-8 px-4 sm:px-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {plans.map((plan, index) => (
+            {/* Pricing Cards */}
+            <div className="max-w-7xl mx-auto px-4 pb-20">
+                <div className="grid md:grid-cols-3 gap-8">
+                    {plans.map((plan) => (
                         <div
-                            key={index}
-                            className={`${
-                                isDarkTheme ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
-                            } border rounded-lg flex flex-col text-left hover:shadow-lg transition-shadow duration-300`}
+                            key={plan.id}
+                            className={`relative ${
+                                plan.name === "Professional" ? "transform md:-translate-y-4" : ""
+                            } rounded-2xl shadow-lg ${
+                                isDarkTheme ? "bg-gray-800" : "bg-white"
+                            } transition-all duration-300 hover:shadow-xl`}
                         >
-                            <div className="p-6 sm:p-8 flex-grow">
-                                <h4 className="text-[18px] sm:text-[20px] font-semibold mb-2">{plan.name}</h4>
-                                <p className={`${isDarkTheme ? "text-gray-400" : "text-gray-600"} mb-4`}>
-                                    {plan.description}
-                                </p>
-                                <p className="text-3xl sm:text-4xl font-bold mb-1">{plan.price}</p>
-                                <p className="text-xs sm:text-sm text-gray-500 mb-4">{plan.period}</p>
-                                {plan.name === "Free" && (
-                                    <button className="bg-transparent text-yellow-500 border border-gray-600 hover:border-yellow-500 py-2 px-4 rounded mb-2 hover:bg-yellow-500 hover:text-white transition-colors">
-                                        Try Free
-                                    </button>
-                                )}
-                                {plan.name !== "Free" && (
-                                    <button className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 transition-colors">
-                                        Subscribe Now
-                                    </button>
-                                )}
-                            </div>
-                            <div className={`${isDarkTheme ? "bg-gray-800" : "bg-gray-50"} flex-grow`}>
-                                <h5
-                                    className={`font-normal ${
-                                        isDarkTheme ? "text-gray-400" : "text-gray-500"
-                                    } px-4 py-2`}
+                            {plan.name === "Professional" && (
+                                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                                    <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-2 rounded-full text-sm font-semibold">
+                                        Most Popular
+                                    </span>
+                                </div>
+                            )}
+                            <div className="p-8">
+                                <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
+                                <p className="text-gray-500 mb-6">{plan.description}</p>
+                                <div className="mb-6">
+                                    <span className="text-4xl font-bold">{plan.price}</span>
+                                    <span className="text-gray-500">/{plan.period}</span>
+                                </div>
+                                <button
+                                    onClick={() => handleSelectPlan(plan.id)}
+                                    className={`w-full py-3 px-4 rounded-lg font-semibold transition-colors ${
+                                        plan.name === "Professional"
+                                            ? "bg-blue-500 hover:bg-blue-600 text-white"
+                                            : "border border-blue-500 text-blue-500 hover:bg-blue-50"
+                                    }`}
                                 >
-                                    Features
-                                </h5>
-                                <ul className="px-4 pb-4">
+                                    {plan.name === "Professional" ? "Get Started" : "Choose Plan"}
+                                </button>
+                                <ul className="mt-8 space-y-4">
                                     {plan.features.map((feature, idx) => (
-                                        <li key={idx} className="flex items-center mb-1">
+                                        <li key={idx} className="flex items-center">
                                             {feature.included ? (
-                                                <FaCheck
-                                                    className={`${
-                                                        isDarkTheme ? "text-yellow-400" : "text-yellow-500"
-                                                    } mr-2`}
-                                                />
+                                                <FaCheck className="text-green-500 mr-3" />
                                             ) : (
-                                                <FaTimes
-                                                    className={`${
-                                                        isDarkTheme ? "text-gray-500" : "text-gray-400"
-                                                    } mr-2`}
-                                                />
+                                                <FaTimes className="text-gray-400 mr-3" />
                                             )}
-                                            <span className={`${isDarkTheme ? "text-gray-300" : "text-gray-700"}`}>
+                                            <span className={feature.included ? "text-gray-700" : "text-gray-400"}>
                                                 {feature.name}
                                             </span>
                                         </li>
@@ -189,10 +184,10 @@ const Plans = () => {
                         </div>
                     ))}
                 </div>
-            </section>
+            </div>
 
-            {/* Enhanced Footer */}
-            <footer className={`${isDarkTheme ? 'bg-gray-900' : 'bg-gray-100'} pt-20 pb-10`}>
+            {/* Footer */}
+            <footer className={`${isDarkTheme ? 'bg-gray-900' : 'bg-gray-100'} py-12`}>
                 <div className="max-w-6xl mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
                         <div>
