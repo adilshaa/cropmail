@@ -72,17 +72,17 @@ const LoginPage = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		
+
 		// Clear previous errors
 		setEmailError("");
 		setPasswordError("");
-		
+
 		// Validate both fields before proceeding
 		if (!email) {
 			setEmailError("Email is required");
 			return;
 		}
-		
+
 		if (!password) {
 			setPasswordError("Password is required");
 			return;
@@ -102,7 +102,7 @@ const LoginPage = () => {
 		try {
 			const response = await post("/login", { email, password }, false);
 			if (response && response.token) {
-				localStorage.setItem('token', response.token);
+				localStorage.setItem("token", response.token);
 				navigate(from, { replace: true });
 			} else {
 				setEmailError("Invalid response from server");

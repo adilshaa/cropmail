@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
+import PublicRoute from "./components/PublicRoute";
 import LoginPage from "./pages/Login";
 import Home from "./pages/Home";
 import LandingPage from "./pages/Landing";
@@ -46,10 +47,10 @@ function App() {
 					<Suspense fallback={<div>Loading...</div>}>
 						<Routes>
 							{/* Public Routes */}
-							<Route path="/login" element={<LoginPage />} />
+							<Route path="/login" element={<PublicRoute element={LoginPage} />} />
+							<Route path="/register" element={<PublicRoute element={Register} />} />
 							<Route path="/" element={<LandingPage />} />
 							<Route path="/about" element={<About />} />
-							<Route path="/register" element={<Register />} />
 							<Route path="/price" element={<Pricing />} />
 							<Route path="/contact" element={<Contact />} />
 							<Route path="/privacy-policy" element={<PrivacyPolicy />} />
