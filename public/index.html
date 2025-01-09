@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8" />
-		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta charset="utf-8" />
+		<link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#3B82F6" />
 
 		<!-- Primary Meta Tags -->
 		<title>Cropmail - Revolutionary Email Marketing Platform</title>
@@ -21,7 +22,7 @@
 			property="og:description"
 			content="Transform your email marketing with AI-powered automation, analytics, and personalization."
 		/>
-		<meta property="og:image" content="/og-image.jpg" />
+		<meta property="og:image" content="%PUBLIC_URL%/og-image.jpg" />
 
 		<!-- Twitter -->
 		<meta property="twitter:card" content="summary_large_image" />
@@ -31,13 +32,14 @@
 			property="twitter:description"
 			content="Transform your email marketing with AI-powered automation, analytics, and personalization."
 		/>
-		<meta property="twitter:image" content="/og-image.jpg" />
+		<meta property="twitter:image" content="%PUBLIC_URL%/og-image.jpg" />
 
-		<!-- Fonts -->
-		<link
-			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-			rel="stylesheet"
-		/>
+		<link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+		<link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+		<!-- Preconnect to important third-party origins -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
 		<!-- Structured Data -->
 		<script type="application/ld+json">
@@ -56,7 +58,7 @@
 		</script>
 	</head>
 	<body>
+		<noscript>You need to enable JavaScript to run this app.</noscript>
 		<div id="root"></div>
-		<script type="module" src="/src/main.jsx"></script>
 	</body>
 </html>

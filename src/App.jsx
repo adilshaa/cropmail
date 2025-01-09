@@ -24,6 +24,7 @@ import Pricing from "./pages/Plans";
 import Settings from "./components/Settings";
 import Schedule from "./components/Schedule";
 import { SnackbarProvider } from './contexts/SnackbarContext';
+import { HelmetProvider } from 'react-helmet-async';
 
 const clientId = "373314217149-ks6armu585104gmhg10drdk1odl70s3n.apps.googleusercontent.com";
 
@@ -52,56 +53,58 @@ const PaymentSuccess = () => {
 function App() {
 	return (
 		<GoogleOAuthProvider clientId={clientId}>
-			 <SnackbarProvider>
-				<Router>
-					<div className="App">
-						<Suspense fallback={<div>Loading...</div>}>
-							<Routes>
-								{/* Public Routes */}
-								<Route path="/login" element={<PublicRoute element={LoginPage} />} />
-								<Route path="/register" element={<PublicRoute element={Register} />} />
-								<Route path="/" element={<LandingPage />} />
-								<Route path="/about" element={<About />} />
-								<Route path="/price" element={<Pricing />} />
-								<Route path="/contact" element={<Contact />} />
-								<Route path="/privacy-policy" element={<PrivacyPolicy />} />
-								<Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+			<HelmetProvider>
+				<SnackbarProvider>
+					<Router>
+						<div className="App">
+							<Suspense fallback={<div>Loading...</div>}>
+								<Routes>
+									{/* Public Routes */}
+									<Route path="/login" element={<PublicRoute element={LoginPage} />} />
+									<Route path="/register" element={<PublicRoute element={Register} />} />
+									<Route path="/" element={<LandingPage />} />
+									<Route path="/about" element={<About />} />
+									<Route path="/price" element={<Pricing />} />
+									<Route path="/contact" element={<Contact />} />
+									<Route path="/privacy-policy" element={<PrivacyPolicy />} />
+									<Route path="/terms-and-conditions" element={<TermsAndConditions />} />
 
-								{/* Protected Parent Route */}
-								<Route path="/home" element={<PrivateRoute element={Home} />}>
-									{/* Email Management Routes */}
-									<Route index element={<Navigate to="inbox" replace />} />
-									<Route path="inbox" element={<Sent />} />
-									<Route path="sent" element={<Sent />} />
-									<Route path="drafts" element={<Drafts />} />
-									<Route path="compose" element={<Compose />} />
-									<Route path="schedule" element={<Schedule />} />
-									<Route path="template-editor" element={<TemplateEditor />} /> {/* Add new route */}
+									{/* Protected Parent Route */}
+									<Route path="/home" element={<PrivateRoute element={Home} />}>
+										{/* Email Management Routes */}
+										<Route index element={<Navigate to="inbox" replace />} />
+										<Route path="inbox" element={<Sent />} />
+										<Route path="sent" element={<Sent />} />
+										<Route path="drafts" element={<Drafts />} />
+										<Route path="compose" element={<Compose />} />
+										<Route path="schedule" element={<Schedule />} />
+										<Route path="template-editor" element={<TemplateEditor />} /> {/* Add new route */}
 
-									{/* User Management Routes */}
-									<Route path="profile" element={<Profile />} />
-									<Route path="settings" element={<Settings />} />
+										{/* User Management Routes */}
+										<Route path="profile" element={<Profile />} />
+										<Route path="settings" element={<Settings />} />
 
-									{/* Modified Payment Routes */}
-									<Route path="billing" element={<Billing />} />
-									<Route
-										path="pay"
-										element={
-											<StripeWrapper>
-												<Payment />
-											</StripeWrapper>
-										}
-									/>
-									<Route path="payment-success" element={<PaymentSuccess />} />
-								</Route>
+										{/* Modified Payment Routes */}
+										<Route path="billing" element={<Billing />} />
+										<Route
+											path="pay"
+											element={
+												<StripeWrapper>
+													<Payment />
+												</StripeWrapper>
+											}
+										/>
+										<Route path="payment-success" element={<PaymentSuccess />} />
+									</Route>
 
-								{/* Fallback Route */}
-								{/* <Route path="*" element={<Navigate to="/" replace />} /> */}
-							</Routes>
-						</Suspense>
-					</div>
-				</Router>
-			</SnackbarProvider>
+									{/* Fallback Route */}
+									{/* <Route path="*" element={<Navigate to="/" replace />} /> */}
+								</Routes>
+							</Suspense>
+						</div>
+					</Router>
+				</SnackbarProvider>
+			</HelmetProvider>
 		</GoogleOAuthProvider>
 	);
 }

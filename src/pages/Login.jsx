@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import { GoogleLogin } from "@react-oauth/google";
 import { FaSun, FaMoon, FaGoogle, FaMicrosoft } from "react-icons/fa";
 import msalInstance from "../msalConfig";
+import SEO from "../components/SEO";
 
 const LoginPage = () => {
 	const [email, setEmail] = useState("");
@@ -147,152 +148,160 @@ const LoginPage = () => {
 	};
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
-			{/* Header with Glass Effect */}
-			<nav className="fixed w-full backdrop-blur-md bg-white/70 dark:bg-gray-900/70 z-50 px-5 sm:px-20 py-4">
-				<div className="flex justify-between items-center">
-					<h1
-						className={`text-2xl font-bold bg-gradient-to-r ${
-							isDarkTheme ? "from-blue-400 to-purple-500" : "from-blue-600 to-purple-600"
-						} bg-clip-text text-transparent`}
-					>
-						Cropmail
-					</h1>
-					<button
-						onClick={() => setIsDarkTheme(!isDarkTheme)}
-						className={`ml-4 px-4 py-2 rounded flex items-center ${
-							isDarkTheme ? "text-yellow-500" : "text-gray-800"
-						}`}
-					>
-						{isDarkTheme ? <FaSun className="w-5 h-5 rotate" /> : <FaMoon className="w-5 h-5 float" />}
-					</button>
-				</div>
-			</nav>
+		<>
+			<SEO
+				title="Login"
+				description="Access your Cropmail account to manage your email marketing campaigns and analytics."
+				keywords={["login", "sign in", "email marketing access", "cropmail login"]}
+				canonical="https://cropmail.onrender.com/login"
+			/>
+			<div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
+				{/* Header with Glass Effect */}
+				<nav className="fixed w-full backdrop-blur-md bg-white/70 dark:bg-gray-900/70 z-50 px-5 sm:px-20 py-4">
+					<div className="flex justify-between items-center">
+						<h1
+							className={`text-2xl font-bold bg-gradient-to-r ${
+								isDarkTheme ? "from-blue-400 to-purple-500" : "from-blue-600 to-purple-600"
+							} bg-clip-text text-transparent`}
+						>
+							Cropmail
+						</h1>
+						<button
+							onClick={() => setIsDarkTheme(!isDarkTheme)}
+							className={`ml-4 px-4 py-2 rounded flex items-center ${
+								isDarkTheme ? "text-yellow-500" : "text-gray-800"
+							}`}
+						>
+							{isDarkTheme ? <FaSun className="w-5 h-5 rotate" /> : <FaMoon className="w-5 h-5 float" />}
+						</button>
+					</div>
+				</nav>
 
-			{/* Login Form Section */}
-			<div className="relative pt-24 pb-32">
-				<div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 to-purple-600/30 animate-gradient-xy"></div>
-				<div className="relative z-10 max-w-md mx-auto px-4">
-					<div className={`bg-white dark:bg-gray-800 rounded-lg p-8 shadow-xl`}>
-						<h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">Welcome Back</h2>
+				{/* Login Form Section */}
+				<div className="relative pt-24 pb-32">
+					<div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 to-purple-600/30 animate-gradient-xy"></div>
+					<div className="relative z-10 max-w-md mx-auto px-4">
+						<div className={`bg-white dark:bg-gray-800 rounded-lg p-8 shadow-xl`}>
+							<h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">Welcome Back</h2>
 
-						<form onSubmit={handleSubmit}>
-							<div className="mb-4">
-								<label
-									className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2"
-									htmlFor="email"
-								>
-									Email
-								</label>
-								<input
-									type="email"
-									id="email"
-									value={email}
-									onChange={handleEmailChange}
-									className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-										emailError ? "border-red-500" : ""
-									}`}
-									placeholder="Enter your email"
-								/>
-								{emailError && <p className="text-red-500 text-xs italic">{emailError}</p>}
-							</div>
-							<div className="mb-6">
-								<label
-									className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2"
-									htmlFor="password"
-								>
-									Password
-								</label>
-								<div className="relative">
-									<input
-										type={showPassword ? "text" : "password"}
-										id="password"
-										value={password}
-										onChange={handlePasswordChange}
-										className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-											passwordError ? "border-red-500" : ""
-										}`}
-										placeholder="Enter your password"
-									/>
-									<button
-										type="button"
-										onClick={() => setShowPassword(!showPassword)}
-										className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-gray-600 dark:text-gray-400"
+							<form onSubmit={handleSubmit}>
+								<div className="mb-4">
+									<label
+										className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2"
+										htmlFor="email"
 									>
-										{showPassword ? "Hide" : "Show"}
+										Email
+									</label>
+									<input
+										type="email"
+										id="email"
+										value={email}
+										onChange={handleEmailChange}
+										className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+											emailError ? "border-red-500" : ""
+										}`}
+										placeholder="Enter your email"
+									/>
+									{emailError && <p className="text-red-500 text-xs italic">{emailError}</p>}
+								</div>
+								<div className="mb-6">
+									<label
+										className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2"
+										htmlFor="password"
+									>
+										Password
+									</label>
+									<div className="relative">
+										<input
+											type={showPassword ? "text" : "password"}
+											id="password"
+											value={password}
+											onChange={handlePasswordChange}
+											className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+												passwordError ? "border-red-500" : ""
+											}`}
+											placeholder="Enter your password"
+										/>
+										<button
+											type="button"
+											onClick={() => setShowPassword(!showPassword)}
+											className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-gray-600 dark:text-gray-400"
+										>
+											{showPassword ? "Hide" : "Show"}
+										</button>
+									</div>
+									{passwordError && <p className="text-red-500 text-xs italic">{passwordError}</p>}
+								</div>
+								<div className="flex items-center justify-between">
+									<button
+										type="submit"
+										className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+									>
+										Sign In
+									</button>
+									<a
+										href="#"
+										className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+									>
+										Forgot Password?
+									</a>
+								</div>
+							</form>
+
+							<div className="mt-6">
+								<div className="relative">
+									<div className="absolute inset-0 flex items-center">
+										<div
+											className={`w-full border-t ${
+												isDarkTheme ? "border-gray-700" : "border-gray-300"
+											}`}
+										></div>
+									</div>
+									<div className="relative flex justify-center text-sm">
+										<span
+											className={`px-2 ${isDarkTheme ? "bg-gray-800" : "bg-white"} ${
+												isDarkTheme ? "text-gray-400" : "text-gray-500"
+											}`}
+										>
+											Or continue with
+										</span>
+									</div>
+								</div>
+
+								<div className="mt-6 grid grid-cols-2 gap-4">
+									<div className="w-full">
+										<GoogleLogin
+											onSuccess={onGoogleSuccess}
+											onError={onGoogleFailure}
+											size="large"
+											theme={isDarkTheme ? "filled_black" : "outline"}
+										/>
+									</div>
+									<button
+										onClick={handleMicrosoftLogin}
+										className={`flex items-center justify-center px-4 py-2 border ${
+											isDarkTheme
+												? "border-gray-700 hover:bg-gray-700"
+												: "border-gray-300 hover:bg-gray-50"
+										} rounded-lg transition-colors`}
+									>
+										<FaMicrosoft className="mr-2" />
+										Microsoft
 									</button>
 								</div>
-								{passwordError && <p className="text-red-500 text-xs italic">{passwordError}</p>}
-							</div>
-							<div className="flex items-center justify-between">
-								<button
-									type="submit"
-									className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-								>
-									Sign In
-								</button>
-								<a
-									href="#"
-									className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-								>
-									Forgot Password?
-								</a>
-							</div>
-						</form>
-
-						<div className="mt-6">
-							<div className="relative">
-								<div className="absolute inset-0 flex items-center">
-									<div
-										className={`w-full border-t ${
-											isDarkTheme ? "border-gray-700" : "border-gray-300"
-										}`}
-									></div>
-								</div>
-								<div className="relative flex justify-center text-sm">
-									<span
-										className={`px-2 ${isDarkTheme ? "bg-gray-800" : "bg-white"} ${
-											isDarkTheme ? "text-gray-400" : "text-gray-500"
-										}`}
-									>
-										Or continue with
-									</span>
-								</div>
 							</div>
 
-							<div className="mt-6 grid grid-cols-2 gap-4">
-								<div className="w-full">
-									<GoogleLogin
-										onSuccess={onGoogleSuccess}
-										onError={onGoogleFailure}
-										size="large"
-										theme={isDarkTheme ? "filled_black" : "outline"}
-									/>
-								</div>
-								<button
-									onClick={handleMicrosoftLogin}
-									className={`flex items-center justify-center px-4 py-2 border ${
-										isDarkTheme
-											? "border-gray-700 hover:bg-gray-700"
-											: "border-gray-300 hover:bg-gray-50"
-									} rounded-lg transition-colors`}
-								>
-									<FaMicrosoft className="mr-2" />
-									Microsoft
-								</button>
-							</div>
+							<p className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
+								Don't have an account?{" "}
+								<Link to="/register" className="text-blue-500 hover:text-blue-600 font-medium">
+									Sign up
+								</Link>
+							</p>
 						</div>
-
-						<p className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
-							Don't have an account?{" "}
-							<Link to="/register" className="text-blue-500 hover:text-blue-600 font-medium">
-								Sign up
-							</Link>
-						</p>
 					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

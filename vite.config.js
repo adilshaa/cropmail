@@ -1,7 +1,12 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
-	plugins: [react()],
-});
+  plugins: [react()],
+  // Add this to handle %PUBLIC_URL% like CRA
+  define: {
+    'process.env': process.env
+  },
+  // Update public directory path if needed
+  publicDir: 'public'
+})
