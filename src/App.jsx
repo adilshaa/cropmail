@@ -1,108 +1,102 @@
-import React, { useState, useEffect, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import React, { Suspense, lazy } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { HelmetProvider } from "react-helmet-async";
+import { SnackbarProvider } from "./contexts/SnackbarContext";
+
+// Components
 import PrivateRoute from "./components/PrivateRoute";
 import PublicRoute from "./components/PublicRoute";
-import LoginPage from "./pages/Login";
-import Home from "./pages/Home";
-import LandingPage from "./pages/Landing";
-import Sent from "../src/pages/Sent";
-import Profile from "../src/pages/Profile";
-import Billing from "../src/pages/Billing";
-import PrivacyPolicy from "./components/PrivacyPolicy";
-import TermsAndConditions from "./components/TermsAndConditions";
-import Contact from "./pages/Contact";
-import About from "./pages/About";
-import Register from "./pages/Register";
-import Compose from "./pages/Compose";
-import Drafts from "./pages/Drafts";
-import TemplateEditor from "./pages/TemplateEditor"; // Import the new page
-
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import StripeWrapper from "./components/StripeWrapper";
-import Payment from "./pages/Payment";
-import Pricing from "./pages/Plans";
-import Settings from "./components/Settings";
-import Schedule from "./components/Schedule";
-import { SnackbarProvider } from './contexts/SnackbarContext';
-import { HelmetProvider } from 'react-helmet-async';
+import LoadingSpinner from "./components/LoadingSpinner";
 
-const clientId = "373314217149-ks6armu585104gmhg10drdk1odl70s3n.apps.googleusercontent.com";
-
-const PaymentSuccess = () => {
-	const navigate = useNavigate();
-
-	useEffect(() => {
-		const timer = setTimeout(() => {
-			navigate("/home");
-		}, 3000);
-
-		return () => clearTimeout(timer);
-	}, []);
-
-	return (
-		<div className="flex items-center justify-center min-h-screen bg-gray-50">
-			<div className="text-center p-8 bg-white rounded-xl shadow-lg">
-				<div className="text-green-500 text-5xl mb-4">✓</div>
-				<h2 className="text-2xl font-bold text-gray-800 mb-2">Payment Successful!</h2>
-				<p className="text-gray-600">Redirecting to your dashboard...</p>
-			</div>
-		</div>
-	);
+// Lazy loaded components
+const LazyComponents = {
+	LoginPage: lazy(() => import("./pages/Login")),
+	Home: lazy(() => import("./pages/Home")),
+	LandingPage: lazy(() => import("./pages/Landing")),
+	About: lazy(() => import("./pages/About")),
+	Courses: lazy(() => import("./pages/Courses")),
+	CourseDetails: lazy(() => import("./pages/CourseDetails")),
+	Contact: lazy(() => import("./pages/Contact")),
+	Register: lazy(() => import("./pages/Register")),
+	Plans: lazy(() => import("./pages/Plans")),
+	Profile: lazy(() => import("./pages/Profile")),
+	Payment: lazy(() => import("./pages/Payment")),
+	// MyCourses: lazy(() => import("./pages/MyCourses")),
+	PaymentSuccess: lazy(() => import("./components/PaymentSuccess")),
+	PrivacyPolicy: lazy(() => import("./components/PrivacyPolicy")),
+	TermsAndConditions: lazy(() => import("./components/TermsAndConditions")),
+	Settings: lazy(() => import("./components/Settings")),
 };
+
+const publicRoutes = [
+	{ path: "/login", Component: LazyComponents.LoginPage, isPublic: true },
+	{ path: "/register", Component: LazyComponents.Register, isPublic: true },
+	{ path: "/", Component: LazyComponents.LandingPage },
+	{ path: "/about", Component: LazyComponents.About },
+	{ path: "/price", Component: LazyComponents.Plans },
+
+	{ path: "/courses", Component: LazyComponents.Courses },
+	{ path: "/course/:id", Component: LazyComponents.CourseDetails },
+	{ path: "/contact", Component: LazyComponents.Contact },
+	{ path: "/privacy-policy", Component: LazyComponents.PrivacyPolicy },
+	{ path: "/terms-and-conditions", Component: LazyComponents.TermsAndConditions },
+];
+
+const privateRoutes = [
+	// { path: "learning/:courseId", Component: LazyComponents.Learning },
+	{ path: "profile", Component: LazyComponents.Profile },
+	{ path: "settings", Component: LazyComponents.Settings },
+	// { path: "my-courses", Component: LazyComponents.MyCourses },
+	{ path: "pay", Component: LazyComponents.Payment, wrapper: StripeWrapper },
+	{ path: "payment-success", Component: LazyComponents.PaymentSuccess },
+];
+
+const CLIENT_ID = "373314217149-ks6armu585104gmhg10drdk1odl70s3n.apps.googleusercontent.com";
 
 function App() {
 	return (
-		<GoogleOAuthProvider clientId={clientId}>
+		<GoogleOAuthProvider clientId={CLIENT_ID}>
 			<HelmetProvider>
 				<SnackbarProvider>
-					<Router>
+					<BrowserRouter>
 						<div className="App">
-							<Suspense fallback={<div>Loading...</div>}>
+							<Suspense fallback={<LoadingSpinner />}>
 								<Routes>
-									{/* Public Routes */}
-									<Route path="/login" element={<PublicRoute element={LoginPage} />} />
-									<Route path="/register" element={<PublicRoute element={Register} />} />
-									<Route path="/" element={<LandingPage />} />
-									<Route path="/about" element={<About />} />
-									<Route path="/price" element={<Pricing />} />
-									<Route path="/contact" element={<Contact />} />
-									<Route path="/privacy-policy" element={<PrivacyPolicy />} />
-									<Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+									{publicRoutes.map(({ path, Component, isPublic }) =>
+										isPublic ? (
+											<Route
+												key={path}
+												path={path}
+												element={<PublicRoute element={Component} />}
+											/>
+										) : (
+											<Route key={path} path={path} element={<Component />} />
+										)
+									)}
 
-									{/* Protected Parent Route */}
-									<Route path="/home" element={<PrivateRoute element={Home} />}>
-										{/* Email Management Routes */}
-										<Route index element={<Navigate to="inbox" replace />} />
-										<Route path="inbox" element={<Sent />} />
-										<Route path="sent" element={<Sent />} />
-										<Route path="drafts" element={<Drafts />} />
-										<Route path="compose" element={<Compose />} />
-										<Route path="schedule" element={<Schedule />} />
-										<Route path="template-editor" element={<TemplateEditor />} /> {/* Add new route */}
-
-										{/* User Management Routes */}
-										<Route path="profile" element={<Profile />} />
-										<Route path="settings" element={<Settings />} />
-
-										{/* Modified Payment Routes */}
-										<Route path="billing" element={<Billing />} />
-										<Route
-											path="pay"
-											element={
-												<StripeWrapper>
-													<Payment />
-												</StripeWrapper>
-											}
-										/>
-										<Route path="payment-success" element={<PaymentSuccess />} />
+									<Route path="/home" element={<PrivateRoute element={LazyComponents.Home} />}>
+										{privateRoutes.map(({ path, Component, wrapper: Wrapper }) => (
+											<Route
+												key={path}
+												path={path}
+												element={
+													Wrapper ? (
+														<Wrapper>
+															<Component />
+														</Wrapper>
+													) : (
+														<Component />
+													)
+												}
+											/>
+										))}
 									</Route>
-
-									{/* Fallback Route */}
-									{/* <Route path="*" element={<Navigate to="/" replace />} /> */}
 								</Routes>
 							</Suspense>
 						</div>
-					</Router>
+					</BrowserRouter>
 				</SnackbarProvider>
 			</HelmetProvider>
 		</GoogleOAuthProvider>
