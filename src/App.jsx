@@ -23,11 +23,18 @@ const LazyComponents = {
 	Plans: lazy(() => import("./pages/Plans")),
 	Profile: lazy(() => import("./pages/Profile")),
 	Payment: lazy(() => import("./pages/Payment")),
+	CourseSearch: lazy(() => import("./pages/CourseSearch")),
 	// MyCourses: lazy(() => import("./pages/MyCourses")),
 	PaymentSuccess: lazy(() => import("./components/PaymentSuccess")),
 	PrivacyPolicy: lazy(() => import("./components/PrivacyPolicy")),
 	TermsAndConditions: lazy(() => import("./components/TermsAndConditions")),
 	Settings: lazy(() => import("./components/Settings")),
+	Chat: lazy(() => import("./pages/Chat")),
+	CourseGPT: lazy(() => import("./pages/CourseGPT")),
+	DashboardLayout: lazy(() => import("./layouts/DashboardLayout")),
+	AuthorDashboard: lazy(() => import("./pages/AuthorDashboard")),
+	AutherCourses: lazy(() => import("./pages/author/Courses")),
+
 };
 
 const publicRoutes = [
@@ -36,12 +43,15 @@ const publicRoutes = [
 	{ path: "/", Component: LazyComponents.LandingPage },
 	{ path: "/about", Component: LazyComponents.About },
 	{ path: "/price", Component: LazyComponents.Plans },
+	{ path: "/search", Component: LazyComponents.CourseSearch },
 
 	{ path: "/courses", Component: LazyComponents.Courses },
 	{ path: "/course/:id", Component: LazyComponents.CourseDetails },
 	{ path: "/contact", Component: LazyComponents.Contact },
 	{ path: "/privacy-policy", Component: LazyComponents.PrivacyPolicy },
 	{ path: "/terms-and-conditions", Component: LazyComponents.TermsAndConditions },
+	{ path: "/chat", Component: LazyComponents.Chat },
+	{ path: "/course/:id/gpt", Component: LazyComponents.CourseGPT },
 ];
 
 const privateRoutes = [
@@ -51,6 +61,14 @@ const privateRoutes = [
 	// { path: "my-courses", Component: LazyComponents.MyCourses },
 	{ path: "pay", Component: LazyComponents.Payment, wrapper: StripeWrapper },
 	{ path: "payment-success", Component: LazyComponents.PaymentSuccess },
+];
+
+// Add new author routes
+const authorRoutes = [
+	{ path: "dashboard", Component: LazyComponents.AuthorDashboard },
+	{ path: "courses", Component: LazyComponents.AutherCourses },
+
+	// Add more author routes here as needed
 ];
 
 const CLIENT_ID = "373314217149-ks6armu585104gmhg10drdk1odl70s3n.apps.googleusercontent.com";
@@ -75,6 +93,17 @@ function App() {
 											<Route key={path} path={path} element={<Component />} />
 										)
 									)}
+
+									{/* Author Dashboard Routes */}
+									{/* <Route
+										path="/author"
+										element={<PrivateRoute element={LazyComponents.DashboardLayout} />}
+									> */}
+									<Route path="/author" element={<LazyComponents.DashboardLayout />}>
+										{authorRoutes.map(({ path, Component }) => (
+											<Route key={path} path={path} element={<Component />} />
+										))}
+									</Route>
 
 									<Route path="/home" element={<PrivateRoute element={LazyComponents.Home} />}>
 										{privateRoutes.map(({ path, Component, wrapper: Wrapper }) => (

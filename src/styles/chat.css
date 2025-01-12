@@ -1,0 +1,49 @@
+.chat-container::-webkit-scrollbar {
+	width: 6px;
+}
+
+.chat-container::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+	background: #888;
+	border-radius: 3px;
+}
+
+.chat-container::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+
+@keyframes slideUp {
+	from {
+		transform: translateY(20px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+.message-animation {
+	animation: slideUp 0.3s ease-out forwards;
+}
+
+.bg-grid-pattern {
+	background-image: linear-gradient(to right, #e5e7eb 1px, transparent 1px),
+		linear-gradient(to bottom, #e5e7eb 1px, transparent 1px);
+	background-size: 24px 24px;
+}
+
+.chat-container {
+	scrollbar-width: thin;
+	scrollbar-color: #888 #f1f1f1;
+	mask-image: linear-gradient(to top, transparent, black 20px, black calc(100% - 20px), transparent);
+}
+
+@media (max-width: 640px) {
+	.chat-container {
+		height: calc(100vh - 160px) !important;
+	}
+}

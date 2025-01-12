@@ -10,7 +10,7 @@ input:focus {
 	transition: border-color 0.3s ease-in-out;
 }
 .sidebar-shadow {
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 /* Form Load Animation */
 @keyframes slideIn {
@@ -160,20 +160,29 @@ input:focus {
 	background-color: #f4f4f4;
 }
 
-
 @keyframes shake {
-	0% { transform: translateX(0); }
-	25% { transform: translateX(-5px); }
-	50% { transform: translateX(5px); }
-	75% { transform: translateX(-5px); }
-	100% { transform: translateX(0); }
-  }
-  
-  .shake {
+	0% {
+		transform: translateX(0);
+	}
+	25% {
+		transform: translateX(-5px);
+	}
+	50% {
+		transform: translateX(5px);
+	}
+	75% {
+		transform: translateX(-5px);
+	}
+	100% {
+		transform: translateX(0);
+	}
+}
+
+.shake {
 	animation: shake 0.5s ease;
-  }
-  
-  .custom-radio {
+}
+
+.custom-radio {
 	appearance: none;
 	background-color: #fff;
 	border: 2px solid #ccc;
@@ -183,14 +192,14 @@ input:focus {
 	cursor: pointer;
 	position: relative;
 	outline: none;
-  }
-  
-  .custom-radio:checked {
+}
+
+.custom-radio:checked {
 	border-color: #38a169; /* Green border */
-  }
-  
-  .custom-radio:checked::before {
-	content: '';
+}
+
+.custom-radio:checked::before {
+	content: "";
 	display: block;
 	width: 10px;
 	height: 10px;
@@ -200,42 +209,60 @@ input:focus {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-  }
+}
 
 /* Add these styles */
 .tooltip-trigger:hover + .group-hover\:opacity-100 {
-  opacity: 1;
+	opacity: 1;
 }
 
 .tooltip-trigger {
-  position: relative;
+	position: relative;
 }
 
 /* Updated Tooltip Styles */
 .tooltip-container {
-  position: fixed;
-  z-index: 9999;
-  pointer-events: none;
-  transform: translateY(-50%);
+	position: fixed;
+	z-index: 9999;
+	pointer-events: none;
+	transform: translateY(-50%);
 }
 
 .tooltip-enter {
-  opacity: 0;
-  transform: translateX(-10px);
+	opacity: 0;
+	transform: translateX(-10px);
 }
 
 .tooltip-enter-active {
-  opacity: 1;
-  transform: translateX(0);
-  transition: opacity 200ms, transform 200ms;
+	opacity: 1;
+	transform: translateX(0);
+	transition: opacity 200ms, transform 200ms;
 }
 
 .tooltip-exit {
-  opacity: 1;
+	opacity: 1;
 }
 
 .tooltip-exit-active {
-  opacity: 0;
-  transform: translateX(-10px);
-  transition: opacity 200ms, transform 200ms;
+	opacity: 0;
+	transform: translateX(-10px);
+	transition: opacity 200ms, transform 200ms;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+	width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+	background: #f1f1f1;
+	border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background: #888;
+	border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+	background: #555;
 }
