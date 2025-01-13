@@ -34,6 +34,7 @@ const LazyComponents = {
 	DashboardLayout: lazy(() => import("./layouts/DashboardLayout")),
 	AuthorDashboard: lazy(() => import("./pages/AuthorDashboard")),
 	AutherCourses: lazy(() => import("./pages/author/Courses")),
+	AutherCoursesDetailes: lazy(() => import("./pages/author/components/CourseDetails")),
 
 };
 
@@ -67,6 +68,7 @@ const privateRoutes = [
 const authorRoutes = [
 	{ path: "dashboard", Component: LazyComponents.AuthorDashboard },
 	{ path: "courses", Component: LazyComponents.AutherCourses },
+	{ path: "courses/:id", Component: LazyComponents.AutherCoursesDetailes },
 
 	// Add more author routes here as needed
 ];
